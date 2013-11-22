@@ -1,0 +1,13 @@
+
+local timestamp = ""
+timestamp = os.time() + 1800
+hmac = ngx.hmac_sha1("some very secret string", timestamp)
+hmac = ngx.encode_base64(hmac)
+
+
+if ngx.var.cookie_ESToken == nil then
+
+  ngx.var.set_cookie = "ESToken=" .. ngx.escape_uri(timestamp .. ":" .. hmac) .. ";Domain=.logs.127.0.0.1.xip.io"
+
+end
+

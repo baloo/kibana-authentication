@@ -1,0 +1,22 @@
+
+server {
+  server_name logs.127.0.0.1.xip.io;
+
+  set $set_cookie '';
+
+  access_by_lua_file /etc/kibana/nginx-set-cookies.lua;
+  auth_basic "blah";
+  auth_basic_user_file /etc/kibana/users;
+
+  location / {
+    root /var/www/kibana-improvements-use-elasticjs/src;
+
+    add_header Set-Cookie $set_cookie;
+  }
+
+  location /config.js {
+    root /etc/kibana/;
+  }
+
+}
+

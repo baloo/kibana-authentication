@@ -1,0 +1,29 @@
+
+
+
+-- Some variable declarations.
+local cookie = ngx.var.cookie_ESToken
+local cookie_unescaped = ""
+local hmac = ""
+local timestamp = ""
+
+
+-- Check that the cookie exists.
+if cookie ~= nil and ngx.unescape_uri(cookie):find(":") ~= nil then
+    cookie_unescaped = ngx.unescape_uri(cookie)
+    -- If there's a cookie, split off the HMAC signature
+    -- and timestamp.
+    local divider = cookie_unescaped:find(":")
+    hmac = ngx.decode_base64(cookie_unescaped:sub(divider+1))
+    timestamp = cookie_unescaped:sub(0, divider-1)
+
+    -- Verify that the signature is valid.
+    if ngx.hmac_sha1("some very secret string", timestamp) == hmac and tonumber(timestamp) >= os.time() then
+        return
+    end
+end
+
+ngx.exit(403)
+
+
+
