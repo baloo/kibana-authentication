@@ -1,4 +1,4 @@
-# Authentication of elasticsearch with kibana
+# Authentication of elasticsearch with kibana3
 
 ```
 vagrant up
